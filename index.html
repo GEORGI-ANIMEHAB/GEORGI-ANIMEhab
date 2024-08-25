@@ -1,369 +1,345 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аниме Веб-Сайт</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: #eee;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        header {
-            background-color: #1f1f1f;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-            position: sticky;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 10px;
-        }
-        nav a {
-            color: #1e90ff;
-            text-decoration: none;
-            font-size: 20px;
-            position: relative;
-            transition: color 0.3s, transform 0.3s;
-            font-weight: bold;
-        }
-        nav a:hover {
-            color: #63a4ff;
-            transform: scale(1.1);
-        }
-        nav a::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 3px;
-            background: #1e90ff;
-            transition: width 0.3s;
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-        }
-        nav a:hover::after {
-            width: 100%;
-        }
-        .container {
-            flex: 1;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #1e1e1e;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-            overflow: hidden;
-        }
-        .search-bar, .filter-bar, .profile-bar {
-            margin-bottom: 20px;
-        }
-        .search-bar input, .profile-bar input {
-            width: calc(100% - 140px);
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            background-color: #333;
-            color: #eee;
-            font-size: 18px;
-        }
-        .search-bar button, .filter-bar select, .profile-bar button {
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background-color: #333;
-            color: #eee;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .search-bar button:hover, .filter-bar select:hover, .profile-bar button:hover {
-            background-color: #1c7ed6;
-        }
-        .anime-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .anime-list li {
-            position: relative;
-            padding: 20px;
-            border: 1px solid #444;
-            border-radius: 10px;
-            background-color: #2a2a2a;
-            transition: background-color 0.3s, transform 0.3s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        }
-        .anime-list li img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            transition: transform 0.3s;
-        }
-        .anime-list li:hover img {
-            transform: scale(1.15);
-        }
-        .anime-info {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            color: #fff;
-            padding: 25px;
-            box-sizing: border-box;
-            border-radius: 10px;
-            overflow-y: auto;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            transform: translateY(-100%);
-        }
-        .anime-list li:hover .anime-info {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .video-player {
-            margin-top: 25px;
-            position: relative;
-            padding-top: 56.25%;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-            background-color: #000;
-        }
-        .video-player iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #1f1f1f;
-            color: #fff;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.6);
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background: #2e2e2e;
-            border-radius: 10px;
-            padding: 30px;
-            color: #fff;
-            max-width: 700px;
-            width: 100%;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        }
-        .modal-content h2 {
-            margin-top: 0;
-        }
-        .modal-content button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #e74c3c;
-            color: #fff;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .modal-content button:hover {
-            background-color: #c0392b;
-        }
-        .rating {
-            display: flex;
-            justify-content: center;
-            margin: 15px 0;
-        }
-        .rating span {
-            font-size: 20px;
-            margin-right: 10px;
-        }
-        .rating input {
-            margin-right: 15px;
-            cursor: pointer;
-        }
-        .comment-section {
-            margin-top: 25px;
-        }
-        .comment-section h3 {
-            margin-bottom: 15px;
-        }
-        .comment-section textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background-color: #333;
-            color: #eee;
-            font-size: 18px;
-            margin-bottom: 15px;
-            resize: none;
-        }
-        .comment-section button {
-            padding: 12px 18px;
-            border-radius: 8px;
-            border: none;
-            background-color: #1e90ff;
-            color: #fff;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
-        }
-        .comment-section button:hover {
-            background-color: #1c7ed6;
-        }
-        .comments-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        .comments-list li {
-            background-color: #333;
-            border: 1px solid #444;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 12px;
-            color: #fff;
-        }
-        .profile {
-            margin-top: 25px;
-        }
-        .profile img {
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-        .profile-info {
-            text-align: center;
-        }
-        .profile-info h3 {
-            margin: 0;
-        }
-        .favorites-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-        }
-        .favorites-list img {
-            border-radius: 10px;
-            max-width: 150px;
-            height: auto;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Мой Аниме Веб-Сайт</h1>
-        <nav>
-            <a href="#home">Главная</a>
-            <a href="#anime-list">Список Аниме</a>
-            <a href="#profile">Профиль</a>
-        </nav>
-    </header>
-    <div class="container">
-        <div class="search-bar">
-            <input type="text" placeholder="Поиск аниме...">
-            <button>Поиск</button>
-        </div>
-        <div class="filter-bar">
-            <select>
-                <option value="">Выберите жанр</option>
-                <option value="action">Экшн</option>
-                <option value="comedy">Комедия</option>
-                <option value="drama">Драма</option>
-                <!-- Добавьте другие жанры по желанию -->
-            </select>
-        </div>
-        <ul class="anime-list">
-            <!-- Пример элемента списка аниме -->
-            <li>
-                <img src="https://via.placeholder.com/200x300" alt="Аниме">
-                <div class="anime-info">
-                    <h2>Название Аниме</h2>
-                    <p>Описание аниме...</p>
-                    <div class="rating">
-                        <span>Оценка:</span>
-                        <input type="radio" name="rating" value="5"> 5
-                        <input type="radio" name="rating" value="4"> 4
-                        <input type="radio" name="rating" value="3"> 3
-                        <input type="radio" name="rating" value="2"> 2
-                        <input type="radio" name="rating" value="1"> 1
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const helmet = require('helmet');
+const csrf = require('csurf');
+const cookieParser = require('cookie-parser');
+const i18next = require('i18next');
+const i18nextMiddleware = require('i18next-express-middleware');
+const Backend = require('i18next-fs-backend');
+const socketIo = require('socket.io');
+const http = require('http');
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
+
+// Модели
+const userSchema = new mongoose.Schema({
+    username: String,
+    email: String,
+    password: String,
+    isAdmin: Boolean,
+    twoFactorSecret: String
+});
+const User = mongoose.model('User', userSchema);
+
+const contentSchema = new mongoose.Schema({
+    title: String,
+    description: String,
+});
+const Content = mongoose.model('Content', contentSchema);
+
+const commentSchema = new mongoose.Schema({
+    contentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Content', required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    text: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+const Comment = mongoose.model('Comment', commentSchema);
+
+// Настройка Express
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+mongoose.connect('mongodb://localhost/your-database', { useNewUrlParser: true, useUnifiedTopology: true });
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
+app.use(helmet());
+app.use(csrf({ cookie: true }));
+
+i18next
+    .use(Backend)
+    .use(i18nextMiddleware.LanguageDetector)
+    .init({
+        backend: {
+            loadPath: path.join(__dirname, 'locales', '{{lng}}', 'translation.json')
+        },
+        fallbackLng: 'en',
+        preload: ['en', 'fr', 'de'],
+    });
+
+app.use(i18nextMiddleware.handle(i18next));
+
+app.use((req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
+// Маршруты
+app.get('/', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Главная страница</title>
+            <link rel="stylesheet" href="/styles.css">
+        </head>
+        <body>
+            <header>
+                <h1>Добро пожаловать на наш сайт</h1>
+                <nav>
+                    <a href="/">Главная</a>
+                    <a href="/search">Поиск</a>
+                    <a href="/notifications">Уведомления</a>
+                    <a href="/admin">Админ панель</a>
+                </nav>
+            </header>
+
+            <div class="container">
+                <section id="welcome">
+                    <h2>Последний контент</h2>
+                    <div id="latest-content">
+                        <!-- Последний контент будет загружаться сюда -->
                     </div>
-                    <div class="comment-section">
-                        <h3>Оставьте комментарий:</h3>
-                        <textarea rows="4" placeholder="Ваш комментарий..."></textarea>
-                        <button>Отправить</button>
-                    </div>
-                </div>
-            </li>
-        </ul>
-        <div class="video-player">
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="profile">
-            <img src="https://via.placeholder.com/120" alt="Профиль">
-            <div class="profile-info">
-                <h3>Ваше Имя</h3>
-                <p>Краткая информация о вас...</p>
+                </section>
             </div>
-            <h3>Избранное</h3>
-            <ul class="favorites-list">
-                <!-- Пример элемента списка избранного -->
-                <li><img src="https://png.pngtree.com/thumb_back/fw800/background/20230527/pngtree-anime-wallpaper-with-beautiful-girl-sitting-outside-at-night-image_2677350.jpg" alt="Избранное Аниме"></li>
-            </ul>
-        </div>
-    </div>
-    <footer>
-        &copy; 2024 Мой Аниме Веб-Сайт
-    </footer>
-</body>
-</html>
+        </body>
+        </html>
+    `);
+});
+
+app.get('/content/:id', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Контент</title>
+            <link rel="stylesheet" href="/styles.css">
+        </head>
+        <body>
+            <header>
+                <h1>Контент</h1>
+            </header>
+
+            <div class="container">
+                <section id="content-details">
+                    <h2>Детали контента</h2>
+                    <!-- Детали контента будут загружаться сюда -->
+                </section>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+app.get('/search', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Поиск</title>
+            <link rel="stylesheet" href="/styles.css">
+        </head>
+        <body>
+            <header>
+                <h1>Поиск контента</h1>
+            </header>
+
+            <div class="container">
+                <section id="search">
+                    <h2>Найдите что-то</h2>
+                    <input type="text" id="search-query" placeholder="Введите запрос...">
+                    <button id="search-button">Поиск</button>
+                    <div id="search-results">
+                        <!-- Результаты поиска будут загружаться сюда -->
+                    </div>
+                </section>
+            </div>
+
+            <script>
+                document.getElementById('search-button').addEventListener('click', function () {
+                    const query = document.getElementById('search-query').value;
+                    fetch(`/search?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(results => {
+                            const searchResults = document.getElementById('search-results');
+                            searchResults.innerHTML = '';
+                            results.forEach(item => {
+                                const div = document.createElement('div');
+                                div.className = 'search-result-item';
+                                div.innerHTML = \`
+                                    <h3><a href="/content/\${item._id}">\${item.title}</a></h3>
+                                    <p>\${item.description}</p>
+                                \`;
+                                searchResults.appendChild(div);
+                            });
+                        });
+                });
+            </script>
+        </body>
+        </html>
+    `);
+});
+
+app.get('/notifications', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Уведомления</title>
+            <link rel="stylesheet" href="/styles.css">
+        </head>
+        <body>
+            <header>
+                <h1>Уведомления</h1>
+            </header>
+
+            <div class="container">
+                <section id="notifications">
+                    <h2>Уведомления</h2>
+                    <div id="notification-container">
+                        <!-- Уведомления будут загружаться сюда -->
+                    </div>
+                </section>
+            </div>
+
+            <script src="/socket.io/socket.io.js"></script>
+            <script>
+                const socket = io();
+
+                socket.on('notification', function (notification) {
+                    const container = document.getElementById('notification-container');
+                    const div = document.createElement('div');
+                    div.className = 'notification';
+                    div.textContent = notification.message;
+                    container.appendChild(div);
+                });
+            </script>
+        </body>
+        </html>
+    `);
+});
+
+app.get('/admin', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Админ панель</title>
+            <link rel="stylesheet" href="/styles.css">
+        </head>
+        <body>
+            <header>
+                <h1>Админ панель</h1>
+            </header>
+
+            <div class="container">
+                <section id="admin">
+                    <h2>Управление пользователями</h2>
+                    <div id="admin-user-list">
+                        <!-- Список пользователей будет загружаться сюда -->
+                    </div>
+                </section>
+            </div>
+
+            <script>
+                fetch('/admin/users')
+                    .then(response => response.json())
+                    .then(users => {
+                        const userList = document.getElementById('admin-user-list');
+                        users.forEach(user => {
+                            const div = document.createElement('div');
+                            div.className = 'user-item';
+                            div.innerHTML = \`
+                                <p>\${user.username} - \${user.email}</p>
+                                <button onclick="deleteUser('\${user._id}')">Удалить</button>
+                            \`;
+                            userList.appendChild(div);
+                        });
+                    });
+
+                function deleteUser(userId) {
+                    fetch('/admin/users/' + userId, {
+                        method: 'DELETE'
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            location.reload();
+                        }
+                    });
+                }
+            </script>
+        </body>
+        </html>
+    `);
+});
+
+app.post('/setup-2fa', async (req, res) => {
+    const secret = speakeasy.generateSecret();
+    const user = await User.findById(req.user._id);
+    user.twoFactorSecret = secret.base32;
+    await user.save();
+
+    qrcode.toDataURL(secret.otpauth_url, (err, data_url) => {
+        res.json({ secret: secret.base32, qrCodeUrl: data_url });
+    });
+});
+
+app.post('/verify-2fa', async (req, res) => {
+    const { token } = req.body;
+    const user = await User.findById(req.user._id);
+
+    const verified = speakeasy.verify({
+        secret: user.twoFactorSecret,
+        token,
+        encoding: 'base32'
+    });
+
+    if (verified) {
+        res.json({ success: true });
+    } else {
+        res.status(400).json({ error: 'Неверный токен' });
+    }
+});
+
+app.get('/comments/:contentId', async (req, res) => {
+    try {
+        const comments = await Comment.find({ contentId: req.params.contentId });
+        res.json(comments);
+    } catch (error) {
+        res.status(500).json({ error: 'Ошибка получения комментариев' });
+    }
+});
+
+app.post('/comments/:contentId', async (req, res) => {
+    try {
+        const comment = new Comment({
+            contentId: req.params.contentId,
+            userId: req.user._id,
+            text: req.body.text
+        });
+        await comment.save();
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: 'Ошибка отправки комментария' });
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log('New client connected');
+    
+    socket.on('sendNotification', (notification) => {
+        io.emit('notification', notification);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
+
+server.listen(3000, () => {
+    console.log('Server listening on port 3000');
+});
