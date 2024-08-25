@@ -424,3 +424,65 @@
     </script>
 </body>
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const apiUrl = 'https://animevost.org/api/anime'; // Укажите URL вашего API
+
+        const player = document.getElementById('animePlayer');
+        const episodeSelect = document.getElementById('episodeSelect');
+        const animeTitle = document.getElementById('animeTitle');
+        const animeDescription = document.getElementById('animeDescription');
+        const recommendations = document.getElementById('recommendations');
+        const genres = document.getElementById('genres');
+
+        // Загрузка данных из API
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Пример структуры данных, замените на структуру вашего API
+                const animeData = data[0]; // Предположим, что API возвращает массив аниме
+
+                animeTitle.textContent = animeData.title;
+                animeDescription.textContent = animeData.description;
+
+                // Добавление эпизодов
+                animeData.episodes.forEach(episode => {
+                    const option = document.createElement('option');
+                    option.value = episode.url;
+                    option.textContent = episode.title;
+                    episodeSelect.appendChild(option);
+                });
+
+                // Добавление рекомендаций
+                animeData.recommendations.forEach(rec => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = rec.url;
+                    link.textContent = rec.title;
+                    listItem.appendChild(link);
+                    recommendations.appendChild(listItem);
+                });
+
+                // Добавление жанров
+                animeData.genres.forEach(genre => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = genre.url;
+                    link.textContent = genre.name;
+                    listItem.appendChild(link);
+                    genres.appendChild(listItem);
+                });
+
+                // Обработка выбора эпизода
+                episodeSelect.addEventListener('change', (event) => {
+                    const selectedEpisode = event.target.value;
+                    player.src = selectedEpisode;
+                    player.play();
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке данных:', error);
+            });
+    });
+</script>
+
