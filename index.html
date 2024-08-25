@@ -130,20 +130,25 @@
             border: 1px solid #444;
             padding: 10px;
             border-radius: 5px;
+            background: #333;
+            display: flex;
+            align-items: center;
         }
 
         .anime-item img {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            display: block;
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 15px;
         }
 
         .anime-item h3 {
-            margin: 10px 0;
+            margin: 0;
+            font-size: 18px;
         }
 
         .anime-item p {
+            margin: 5px 0;
             color: #ccc;
         }
     </style>
@@ -211,95 +216,93 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Статические данные для демонстрации
-            const animeData = [
-                {
-                    title: '5 Невест',
-                    description: 'Сюжет рассказывает о пяти невестах, которые участвуют в увлекательных приключениях.',
-                    image: 'https://example.com/image1.jpg',
-                    url: '#',
-                    episodes: [
-                        { title: 'Эпизод 1', url: 'episode1.mp4' },
-                        { title: 'Эпизод 2', url: 'episode2.mp4' }
-                    ]
-                },
-                {
-                    title: 'Аниме 2',
-                    description: 'Описание второго аниме.',
-                    image: 'https://example.com/image2.jpg',
-                    url: '#',
-                    episodes: [
-                        { title: 'Эпизод 1', url: 'episode1.mp4' }
-                    ]
-                },
-                {
-                    title: 'Аниме 3',
-                    description: 'Описание третьего аниме.',
-                    image: 'https://example.com/image3.jpg',
-                    url: '#',
-                    episodes: [
-                        { title: 'Эпизод 1', url: 'episode1.mp4' }
-                    ]
-                },
-                {
-                    title: 'Аниме 4',
-                    description: 'Описание четвертого аниме.',
-                    image: 'https://example.com/image4.jpg',
-                    url: '#',
-                    episodes: [
-                        { title: 'Эпизод 1', url: 'episode1.mp4' }
-                    ]
-                },
-                {
-                    title: 'Аниме 5',
-                    description: 'Описание пятого аниме.',
-                    image: 'https://example.com/image5.jpg',
-                    url: '#',
-                    episodes: [
-                        { title: 'Эпизод 1', url: 'episode1.mp4' }
-                    ]
+            // Функция для загрузки данных из API
+            async function fetchAnimeData() {
+                try {
+                    const response = await fetch('https://example.com/api/anime'); // Замените на реальный URL вашего API
+                    const data = await response.json();
+
+                    const player = document.getElementById('animePlayer');
+                    const episodeSelect = document.getElementById('episodeSelect');
+                    const animeTitle = document.getElementById('animeTitle');
+                    const animeDescription = document.getElementById('animeDescription');
+                    const recommendations = document.getElementById('recommendations');
+                    const genres = document.getElementById('genres');
+                    const animeList = document.getElementById('animeList');
+
+                    // Очистка предыдущих данных
+                    episodeSelect.innerHTML = '';
+                    recommendations.innerHTML = '';
+                    genres.innerHTML = '';
+                    animeList.innerHTML = '';
+
+                    data.anime.forEach(anime => {
+                        // Установка данных по умолчанию
+                        if (!animeTitle.textContent) {
+                            animeTitle.textContent = anime.title;
+                            animeDescription.textContent = anime.description;
+                            anime.episodes.forEach(episode => {
+                                const option = document.createElement('option');
+                                option.value = episode.url;
+                                option.textContent = episode.title;
+                                episodeSelect.appendChild(option);
+                            });
+                        }
+
+                        // Добавление рекомендаций
+                        const recommendationItem = document.createElement('li');
+                        recommendationItem.innerHTML = `<a href="${anime.url}">${anime.title}</a>`;
+                        recommendations.appendChild(recommendationItem);
+
+                        // Добавление жанров
+                        anime.genres.forEach(genre => {
+                            const genreItem = document.createElement('li');
+                            genreItem.innerHTML = `<a href="#">${genre}</a>`;
+                            genres.appendChild(genreItem);
+                        });
+
+                        // Добавление списка аниме
+                        const animeItem = document.createElement('div');
+                        animeItem.className = 'anime-item';
+                        animeItem.innerHTML = `
+                            <img src="${anime.image}" alt="${anime.title}">
+                            <div>
+                                <h3>${anime.title}</h3>
+                                <p>${anime.description}</p>
+                                <a href="${anime.url}">Подробнее</a>
+                            </div>
+                        `;
+                        animeList.appendChild(animeItem);
+                    });
+
+                    // Обработка выбора эпизода
+                    episodeSelect.addEventListener('change', (event) => {
+                        const selectedEpisode = event.target.value;
+                        player.src = selectedEpisode;
+                        player.play();
+                    });
+
+                    // Обработка поиска
+                    const searchInput = document.createElement('input');
+                    searchInput.className = 'search-bar';
+                    searchInput.placeholder = 'Поиск аниме...';
+                    document.querySelector('header').appendChild(searchInput);
+
+                    searchInput.addEventListener('input', (event) => {
+                        const query = event.target.value.toLowerCase();
+                        const titles = document.querySelectorAll('#animeList .anime-item');
+                        titles.forEach(title => {
+                            const text = title.querySelector('h3').textContent.toLowerCase();
+                            title.style.display = text.includes(query) ? '' : 'none';
+                        });
+                    });
+
+                } catch (error) {
+                    console.error('Ошибка при загрузке данных аниме:', error);
                 }
-            ];
+            }
 
-            const player = document.getElementById('animePlayer');
-            const episodeSelect = document.getElementById('episodeSelect');
-            const animeTitle = document.getElementById('animeTitle');
-            const animeDescription = document.getElementById('animeDescription');
-            const recommendations = document.getElementById('recommendations');
-            const genres = document.getElementById('genres');
-            const animeList = document.getElementById('animeList');
-
-            // Используем первое аниме для показа по умолчанию
-            const defaultAnime = animeData[0];
-            animeTitle.textContent = defaultAnime.title;
-            animeDescription.textContent = defaultAnime.description;
-
-            defaultAnime.episodes.forEach(episode => {
-                const option = document.createElement('option');
-                option.value = episode.url;
-                option.textContent = episode.title;
-                episodeSelect.appendChild(option);
-            });
-
-            // Добавляем список аниме
-            animeData.forEach(anime => {
-                const animeItem = document.createElement('div');
-                animeItem.className = 'anime-item';
-                animeItem.innerHTML = `
-                    <img src="${anime.image}" alt="${anime.title}">
-                    <h3>${anime.title}</h3>
-                    <p>${anime.description}</p>
-                    <a href="${anime.url}">Подробнее</a>
-                `;
-                animeList.appendChild(animeItem);
-            });
-
-            // Обработка выбора эпизода
-            episodeSelect.addEventListener('change', (event) => {
-                const selectedEpisode = event.target.value;
-                player.src = selectedEpisode;
-                player.play();
-            });
+            fetchAnimeData();
         });
     </script>
 </body>
