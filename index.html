@@ -485,4 +485,275 @@
             });
     });
 </script>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аниме Онлайн</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #fff;
+        }
+
+        header {
+            background: #333;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            display: flex;
+            margin: 20px;
+            flex-wrap: wrap;
+        }
+
+        .player-container {
+            flex: 2;
+            margin-right: 20px;
+        }
+
+        .player-container video {
+            width: 100%;
+            max-height: 500px;
+        }
+
+        .anime-info {
+            flex: 3;
+        }
+
+        .episode-selector {
+            margin-top: 10px;
+        }
+
+        .sidebar {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        footer {
+            background: #333;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .social-media a {
+            margin: 0 10px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Адаптивный дизайн */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            .player-container, .anime-info, .sidebar {
+                margin: 0;
+                flex: 1 100%;
+            }
+        }
+
+        .search-bar {
+            margin: 20px 0;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .tags-genres {
+            margin-top: 20px;
+        }
+
+        .tags-genres ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tags-genres ul li {
+            margin: 5px 0;
+        }
+
+        .tags-genres ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .anime-list {
+            margin-top: 20px;
+        }
+
+        .anime-item {
+            margin-bottom: 20px;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .anime-item img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            display: block;
+        }
+
+        .anime-item h3 {
+            margin: 10px 0;
+        }
+
+        .anime-item p {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Аниме Онлайн</div>
+        <nav>
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Жанры</a></li>
+                <li><a href="#">Избранное</a></li>
+                <li><a href="#">Настройки</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="player-container">
+            <video id="animePlayer" controls>
+                <source src="default.mp4" type="video/mp4">
+                Ваш браузер не поддерживает видео тег.
+            </video>
+        </div>
+        <div class="anime-info">
+            <h1 id="animeTitle">Название Аниме</h1>
+            <p id="animeDescription">Краткое описание аниме.</p>
+            <div class="episode-selector">
+                <label for="episodeSelect">Выберите эпизод:</label>
+                <select id="episodeSelect">
+                    <!-- Эпизоды будут добавлены динамически -->
+                </select>
+            </div>
+        </div>
+        <aside class="sidebar">
+            <h2>Рекомендации</h2>
+            <ul id="recommendations">
+                <!-- Рекомендации будут добавлены динамически -->
+            </ul>
+            <div class="tags-genres">
+                <h3>Жанры</h3>
+                <ul id="genres">
+                    <!-- Жанры будут добавлены динамически -->
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <div class="anime-list">
+        <h2>Популярные Аниме</h2>
+        <div id="animeList">
+            <!-- Аниме будут добавлены динамически -->
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Аниме Онлайн. Все права защищены.</p>
+        <p><a href="#">Политика конфиденциальности</a> | <a href="#">Условия использования</a></p>
+        <div class="social-media">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const apiUrl = 'https://animevost.org/api/anime'; // URL API
+
+            const player = document.getElementById('animePlayer');
+            const episodeSelect = document.getElementById('episodeSelect');
+            const animeTitle = document.getElementById('animeTitle');
+            const animeDescription = document.getElementById('animeDescription');
+            const recommendations = document.getElementById('recommendations');
+            const genres = document.getElementById('genres');
+            const animeList = document.getElementById('animeList');
+
+            // Загрузка данных из API
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Пример использования данных API
+                    const animeData = data.slice(0, 5); // Получаем первые 5 аниме
+
+                    animeData.forEach(anime => {
+                        // Обновление информации о текущем аниме
+                        if (animeData.indexOf(anime) === 0) { // Используем первое аниме для показа по умолчанию
+                            animeTitle.textContent = anime.title;
+                            animeDescription.textContent = anime.description;
+
+                            anime.episodes.forEach(episode => {
+                                const option = document.createElement('option');
+                                option.value = episode.url;
+                                option.textContent = episode.title;
+                                episodeSelect.appendChild(option);
+                            });
+                        }
+
+                        // Добавление списка аниме
+                        const animeItem = document.createElement('div');
+                        animeItem.className = 'anime-item';
+                        animeItem.innerHTML = `
+                            <img src="${anime.image}" alt="${anime.title}">
+                            <h3>${anime.title}</h3>
+                            <p>${anime.description}</p>
+                            <a href="${anime.url}">Подробнее</a>
+                        `;
+                        animeList.appendChild(animeItem);
+                    });
+
+                    // Обработка выбора эпизода
+                    episodeSelect.addEventListener('change', (event) => {
+                        const selectedEpisode = event.target.value;
+                        player.src = selectedEpisode;
+                        player.play();
+                    });
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке данных:', error);
+                });
+        });
+    </script>
+</body>
+</html>
 
