@@ -9,25 +9,26 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #222;
-            color: #fff;
+            background-color: #1e1e1e;
+            color: #f1f1f1;
         }
 
         header {
-            background: #333;
+            background: #282c34;
             padding: 10px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
         }
 
         nav ul {
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin: 10px 0 0;
         }
 
         nav ul li {
@@ -36,7 +37,7 @@
         }
 
         nav ul li a {
-            color: #fff;
+            color: #61dafb;
             text-decoration: none;
         }
 
@@ -54,31 +55,46 @@
         .player-container video {
             width: 100%;
             max-height: 500px;
+            border: 1px solid #444;
+            border-radius: 8px;
         }
 
         .anime-info {
             flex: 3;
         }
 
-        .episode-selector {
-            margin-top: 10px;
+        .episode-selector, .search-bar, .tags-genres {
+            margin-top: 20px;
+        }
+
+        .episode-selector select, .search-bar input {
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #333;
+            color: #f1f1f1;
         }
 
         .sidebar {
             flex: 1;
             margin-left: 20px;
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
         }
 
         footer {
-            background: #333;
+            background: #282c34;
             padding: 10px;
             text-align: center;
-            color: #fff;
+            color: #f1f1f1;
         }
 
         .social-media a {
             margin: 0 10px;
-            color: #fff;
+            color: #61dafb;
             text-decoration: none;
         }
 
@@ -94,18 +110,9 @@
             }
         }
 
-        .search-bar {
-            margin: 20px 0;
-        }
-
         .search-bar input {
-            padding: 10px;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .tags-genres {
-            margin-top: 20px;
+            background: #333;
+            border: 1px solid #444;
         }
 
         .tags-genres ul {
@@ -118,98 +125,45 @@
         }
 
         .tags-genres ul li a {
-            color: #fff;
+            color: #61dafb;
             text-decoration: none;
         }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="logo">Аниме Онлайн</div>
-        <nav>
-            <ul>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Жанры</a></li>
-                <li><a href="#">Избранное</a></li>
-                <li><a href="#">Настройки</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <div class="player-container">
-            <video id="animePlayer" controls>
-                <source src="anime.mp4" type="video/mp4">
-                <source src="anime.webm" type="video/webm">
-                Ваш браузер не поддерживает видео тег.
-            </video>
-        </div>
-        <div class="anime-info">
-            <h1 id="animeTitle">Название Аниме</h1>
-            <p id="animeDescription">Краткое описание аниме.</p>
-            <div class="episode-selector">
-                <label for="episodeSelect">Выберите эпизод:</label>
-                <select id="episodeSelect">
-                    <option value="episode1.mp4">Эпизод 1</option>
-                    <option value="episode2.mp4">Эпизод 2</option>
-                    <!-- Добавь другие эпизоды по мере необходимости -->
-                </select>
-            </div>
-        </div>
-        <aside class="sidebar">
-            <h2>Рекомендации</h2>
-            <ul id="recommendations">
-                <li><a href="#">Рекомендованное Аниме 1</a></li>
-                <li><a href="#">Рекомендованное Аниме 2</a></li>
-                <!-- Добавь другие рекомендации -->
-            </ul>
-            <div class="tags-genres">
-                <h3>Жанры</h3>
-                <ul id="genres">
-                    <li><a href="#">Приключения</a></li>
-                    <li><a href="#">Комедия</a></li>
-                    <!-- Добавь другие жанры -->
-                </ul>
-            </div>
-        </aside>
-    </main>
+        .comment-section, .rating-section {
+            margin-top: 20px;
+        }
 
-    <footer>
-        <p>© 2024 Аниме Онлайн. Все права защищены.</p>
-        <p><a href="#">Политика конфиденциальности</a> | <a href="#">Условия использования</a></p>
-        <div class="social-media">
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
-        </div>
-    </footer>
+        .comment-section textarea, .rating-section select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #333;
+            color: #f1f1f1;
+        }
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = document.getElementById('animePlayer');
-            const episodeSelect = document.getElementById('episodeSelect');
+        .comment-section button, .rating-section button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background: #61dafb;
+            color: #333;
+            cursor: pointer;
+        }
 
-            episodeSelect.addEventListener('change', (event) => {
-                const selectedEpisode = event.target.value;
-                player.src = selectedEpisode;
-                player.play();
-            });
+        .comment-section button:hover, .rating-section button:hover {
+            background: #4fa3d8;
+        }
 
-            // Поиск аниме (простой пример)
-            const searchInput = document.createElement('input');
-            searchInput.className = 'search-bar';
-            searchInput.placeholder = 'Поиск аниме...';
-            document.querySelector('header').appendChild(searchInput);
+        .comment-list {
+            margin-top: 20px;
+        }
 
-            searchInput.addEventListener('input', (event) => {
-                const query = event.target.value.toLowerCase();
-                const titles = document.querySelectorAll('#recommendations a');
-                titles.forEach(title => {
-                    const text = title.textContent.toLowerCase();
-                    title.style.display = text.includes(query) ? '' : 'none';
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+        .comment-list .comment {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .comment-list .comment p {
