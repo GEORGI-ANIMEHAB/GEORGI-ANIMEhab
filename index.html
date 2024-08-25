@@ -167,3 +167,310 @@
         }
 
         .comment-list .comment p {
+            <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аниме Онлайн</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            color: #fff;
+        }
+
+        header {
+            background: #333;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            display: flex;
+            margin: 20px;
+            flex-wrap: wrap;
+        }
+
+        .player-container {
+            flex: 2;
+            margin-right: 20px;
+        }
+
+        .player-container video {
+            width: 100%;
+            max-height: 500px;
+            border: 1px solid #444;
+            border-radius: 8px;
+        }
+
+        .anime-info {
+            flex: 3;
+        }
+
+        .episode-selector {
+            margin-top: 10px;
+        }
+
+        .episode-selector select, .search-bar input {
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #333;
+            color: #f1f1f1;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+        }
+
+        .sidebar {
+            flex: 1;
+            margin-left: 20px;
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .tags-genres {
+            margin-top: 20px;
+        }
+
+        .tags-genres ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tags-genres ul li {
+            margin: 5px 0;
+        }
+
+        .tags-genres ul li a {
+            color: #61dafb;
+            text-decoration: none;
+        }
+
+        .comment-section, .rating-section {
+            margin-top: 20px;
+        }
+
+        .comment-section textarea, .rating-section select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #333;
+            color: #f1f1f1;
+        }
+
+        .comment-section button, .rating-section button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background: #61dafb;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .comment-section button:hover, .rating-section button:hover {
+            background: #4fa3d8;
+        }
+
+        .comment-list {
+            margin-top: 20px;
+        }
+
+        .comment-list .comment {
+            background: #444;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .comment-list .comment p {
+            margin: 0;
+        }
+
+        footer {
+            background: #333;
+            padding: 10px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .social-media a {
+            margin: 0 10px;
+            color: #61dafb;
+            text-decoration: none;
+        }
+
+        /* Адаптивный дизайн */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            .player-container, .anime-info, .sidebar {
+                margin: 0;
+                flex: 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Аниме Онлайн</div>
+        <nav>
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Жанры</a></li>
+                <li><a href="#">Избранное</a></li>
+                <li><a href="#">Настройки</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="player-container">
+            <video id="animePlayer" controls>
+                <source src="anime.mp4" type="video/mp4">
+                <source src="anime.webm" type="video/webm">
+                Ваш браузер не поддерживает видео тег.
+            </video>
+        </div>
+        <div class="anime-info">
+            <h1 id="animeTitle">Название Аниме</h1>
+            <p id="animeDescription">Краткое описание аниме.</p>
+            <div class="episode-selector">
+                <label for="episodeSelect">Выберите эпизод:</label>
+                <select id="episodeSelect">
+                    <option value="episode1.mp4">Эпизод 1</option>
+                    <option value="episode2.mp4">Эпизод 2</option>
+                    <!-- Добавь другие эпизоды по мере необходимости -->
+                </select>
+            </div>
+            <div class="rating-section">
+                <label for="ratingSelect">Оцените это аниме:</label>
+                <select id="ratingSelect">
+                    <option value="5">5 - Отлично</option>
+                    <option value="4">4 - Хорошо</option>
+                    <option value="3">3 - Средне</option>
+                    <option value="2">2 - Плохо</option>
+                    <option value="1">1 - Ужасно</option>
+                </select>
+                <button id="submitRating">Оценить</button>
+            </div>
+            <div class="comment-section">
+                <h2>Комментарии</h2>
+                <textarea id="commentInput" placeholder="Оставьте комментарий..."></textarea>
+                <button id="submitComment">Оставить комментарий</button>
+                <div class="comment-list" id="commentList">
+                    <!-- Комментарии будут добавляться сюда -->
+                </div>
+            </div>
+        </div>
+        <aside class="sidebar">
+            <h2>Рекомендации</h2>
+            <ul id="recommendations">
+                <li><a href="#">Рекомендованное Аниме 1</a></li>
+                <li><a href="#">Рекомендованное Аниме 2</a></li>
+                <!-- Добавь другие рекомендации -->
+            </ul>
+            <div class="tags-genres">
+                <h3>Жанры</h3>
+                <ul id="genres">
+                    <li><a href="#">Приключения</a></li>
+                    <li><a href="#">Комедия</a></li>
+                    <!-- Добавь другие жанры -->
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <p>© 2024 Аниме Онлайн. Все права защищены.</p>
+        <p><a href="#">Политика конфиденциальности</a> | <a href="#">Условия использования</a></p>
+        <div class="social-media">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = document.getElementById('animePlayer');
+            const episodeSelect = document.getElementById('episodeSelect');
+            const commentInput = document.getElementById('commentInput');
+            const commentList = document.getElementById('commentList');
+            const submitComment = document.getElementById('submitComment');
+            const ratingSelect = document.getElementById('ratingSelect');
+            const submitRating = document.getElementById('submitRating');
+
+            episodeSelect.addEventListener('change', (event) => {
+                const selectedEpisode = event.target.value;
+                player.src = selectedEpisode;
+                player.play();
+            });
+
+            submitComment.addEventListener('click', () => {
+                const commentText = commentInput.value.trim();
+                if (commentText) {
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'comment';
+                    commentElement.innerHTML = `<p>${commentText}</p>`;
+                    commentList.appendChild(commentElement);
+                    commentInput.value = '';
+                }
+            });
+
+            submitRating.addEventListener('click', () => {
+                const rating = ratingSelect.value;
+                alert(`Вы оценили это аниме на ${rating} звёзд`);
+            });
+
+            // Поиск аниме
+            const searchInput = document.createElement('input');
+            searchInput.className = 'search-bar';
+            searchInput.placeholder = 'Поиск аниме...';
+            document.querySelector('header').appendChild(searchInput);
+
+            searchInput.addEventListener('input', (event) => {
+                const query = event.target.value.toLowerCase();
+                const titles = document.querySelectorAll('#recommendations a');
+                titles.forEach(title => {
+                    const text = title.textContent.toLowerCase();
+                    title.style.display = text.includes(query) ? '' : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
