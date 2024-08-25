@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аниме Веб-Сайт</title>
+    <title>Расширенный Аниме Веб-Сайт</title>
     <style>
+        /* Основные стили */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -69,19 +70,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
             overflow: hidden;
         }
-        .search-bar, .filter-bar, .profile-bar {
-            margin-bottom: 20px;
-        }
-        .search-bar input, .profile-bar input {
-            width: calc(100% - 140px);
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            background-color: #333;
-            color: #eee;
-            font-size: 18px;
-        }
-        .search-bar button, .filter-bar select, .profile-bar button {
+        .filter-bar select {
             padding: 12px;
             border-radius: 8px;
             border: 1px solid #444;
@@ -91,7 +80,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        .search-bar button:hover, .filter-bar select:hover, .profile-bar button:hover {
+        .filter-bar select:hover {
             background-color: #1c7ed6;
         }
         .anime-list {
@@ -126,28 +115,6 @@
         .anime-list li:hover img {
             transform: scale(1.15);
         }
-        .anime-info {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            color: #fff;
-            padding: 25px;
-            box-sizing: border-box;
-            border-radius: 10px;
-            overflow-y: auto;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            transform: translateY(-100%);
-        }
-        .anime-list li:hover .anime-info {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
         .video-player {
             margin-top: 25px;
             position: relative;
@@ -172,61 +139,12 @@
             color: #fff;
             box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.6);
         }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background: #2e2e2e;
-            border-radius: 10px;
-            padding: 30px;
-            color: #fff;
-            max-width: 700px;
-            width: 100%;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        }
-        .modal-content h2 {
-            margin-top: 0;
-        }
-        .modal-content button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #e74c3c;
-            color: #fff;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .modal-content button:hover {
-            background-color: #c0392b;
-        }
-        .rating {
-            display: flex;
-            justify-content: center;
-            margin: 15px 0;
-        }
-        .rating span {
-            font-size: 20px;
-            margin-right: 10px;
-        }
-        .rating input {
-            margin-right: 15px;
-            cursor: pointer;
-        }
+        /* Комментарии */
         .comment-section {
             margin-top: 25px;
+            background-color: #2e2e2e;
+            padding: 20px;
+            border-radius: 10px;
         }
         .comment-section h3 {
             margin-bottom: 15px;
@@ -264,123 +182,185 @@
             background-color: #333;
             border: 1px solid #444;
             border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            color: #fff;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Аниме Веб-Сайт</h1>
+        <h1>Расширенный Аниме Веб-Сайт</h1>
         <nav>
-            <a href="#home">Главная</a>
-            <a href="#anime">Аниме</a>
-            <a href="#favorites">Избранное</a>
-            <a href="#profile">Профиль</a>
+            <a href="#home" onclick="navigate('home')">Главная</a>
+            <a href="#profile" onclick="navigate('profile')">Профиль</a>
+            <a href="#favorites" onclick="navigate('favorites')">Избранное</a>
+            <a href="#about" onclick="navigate('about')">О сайте</a>
+            <a href="#contact" onclick="navigate('contact')">Контакты</a>
         </nav>
     </header>
-    <div class="container">
-        <div class="search-bar">
-            <input type="text" placeholder="Поиск аниме...">
-            <button>Поиск</button>
-        </div>
-        <div class="filter-bar">
-            <select>
-                <option value="">Фильтр по жанру</option>
-                <option value="action">Экшен</option>
-                <option value="romance">Романтика</option>
-                <option value="comedy">Комедия</option>
-                <!-- Добавьте другие опции по необходимости -->
-            </select>
-        </div>
-        <ul class="anime-list">
-            <li>
-                <img src="anime1.jpg" alt="Аниме 1">
-                <div class="anime-info">
-                    <h2>Название Аниме 1</h2>
-                    <p>Описание аниме 1.</p>
-                    <div class="rating">
-                        <span>Рейтинг:</span>
-                        <input type="radio" id="rating1-5" name="rating1" value="5">
-                        <label for="rating1-5">5</label>
-                        <input type="radio" id="rating1-4" name="rating1" value="4">
-                        <label for="rating1-4">4</label>
-                        <input type="radio" id="rating1-3" name="rating1" value="3">
-                        <label for="rating1-3">3</label>
-                        <input type="radio" id="rating1-2" name="rating1" value="2">
-                        <label for="rating1-2">2</label>
-                        <input type="radio" id="rating1-1" name="rating1" value="1">
-                        <label for="rating1-1">1</label>
-                    </div>
-                    <div class="comment-section">
-                        <h3>Оставьте комментарий:</h3>
-                        <textarea rows="4" placeholder="Ваш комментарий..."></textarea>
-                        <button>Отправить</button>
-                        <ul class="comments-list">
-                            <li>Комментарий 1: Очень классное аниме!</li>
-                            <li>Комментарий 2: Мне не понравилось...</li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <!-- Повторите блок li для других аниме -->
-        </ul>
-        <div class="video-player">
-            <iframe id="youtube-video" src="https://www.youtube.com/embed/MfSE956GpUE" allowfullscreen></iframe>
-        </div>
-        <div class="profile-bar">
-            <input type="text" id="username" placeholder="Ваше имя">
-            <button id="update-profile">Обновить профиль</button>
-        </div>
-        <div class="profile" id="user-profile">
-            <h2>Ваш профиль</h2>
-            <p id="profile-info">Информация о пользователе.</p>
-            <button id="edit-profile">Редактировать</button>
-        </div>
+    <div class="container" id="content">
+        <!-- Контент будет загружаться динамически -->
     </div>
     <footer>
-        <p>&copy; 2024 Ваш Сайт Аниме. Все права защищены.</p>
+        <p>© 2024 Расширенный Аниме Веб-Сайт. Все права защищены.</p>
     </footer>
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button onclick="closeModal()">Закрыть</button>
-            <h2>Дополнительная информация</h2>
-            <p>Тут будет содержимое модального окна.</p>
-        </div>
-    </div>
     <script>
-        function openModal() {
-            document.getElementById('modal').style.display = 'flex';
-        }
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
-        function updateVideo(url) {
-            const iframe = document.getElementById('youtube-video');
-            const videoID = url.split('v=')[1].split('&')[0];
-            iframe.src = `https://www.youtube.com/embed/${videoID}`;
-        }
-        // Пример обработки клика для открытия модального окна
-        document.querySelectorAll('.anime-list li').forEach(item => {
-            item.addEventListener('click', () => {
-                const videoURL = prompt("Введите URL видео на YouTube:");
-                if (videoURL) {
-                    updateVideo(videoURL);
-                    openModal();
-                }
-            });
-        });
-        document.getElementById('update-profile').addEventListener('click', () => {
-            const username = document.getElementById('username').value;
-            document.getElementById('profile-info').textContent = `Профиль пользователя: ${username}`;
-        });
-        document.getElementById('edit-profile').addEventListener('click', () => {
-            const newUsername = prompt("Введите новое имя:");
-            if (newUsername) {
-                document.getElementById('username').value = newUsername;
-                document.getElementById('profile-info').textContent = `Профиль пользователя: ${newUsername}`;
+        const content = document.getElementById('content');
+
+        function navigate(section) {
+            switch(section) {
+                case 'home':
+                    loadHome();
+                    break;
+                case 'profile':
+                    loadProfile();
+                    break;
+                case 'favorites':
+                    loadFavorites();
+                    break;
+                case 'about':
+                    loadAbout();
+                    break;
+                case 'contact':
+                    loadContact();
+                    break;
             }
-        });
+        }
+
+        function loadHome() {
+            content.innerHTML = `
+                <div class="filter-bar">
+                    <select id="filter">
+                        <option value="all">Все жанры</option>
+                        <option value="action">Экшен</option>
+                        <option value="adventure">Приключения</option>
+                        <option value="drama">Драма</option>
+                        <option value="comedy">Комедия</option>
+                        <option value="romance">Романтика</option>
+                        <option value="fantasy">Фэнтези</option>
+                        <option value="horror">Ужасы</option>
+                        <option value="sci-fi">Научная фантастика</option>
+                        <!-- Добавьте больше жанров -->
+                    </select>
+                </div>
+                <h2 class="section-title">Популярное аниме</h2>
+                <ul class="anime-list" id="anime-list">
+                    <!-- Список аниме будет загружен динамически -->
+                </ul>
+                <div class="video-player" id="video-player">
+                    <!-- Встроенный плеер для просмотра аниме -->
+                    <iframe src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div id="loading" class="loading">Загрузка...</div>
+            `;
+            document.getElementById('filter').addEventListener('change', function() {
+                const filter = this.value;
+                filterAnime(filter);
+            });
+            searchAnime('Naruto'); // Пример
+        }
+
+        function searchAnime(query) {
+            const animeListElement = document.getElementById('anime-list');
+            const loadingElement = document.getElementById('loading');
+            loadingElement.style.display = 'block';
+            animeListElement.innerHTML = '';
+
+            // Пример запроса к API (замените на реальный API)
+            fetch(`https://api.example.com/search?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    loadingElement.style.display = 'none';
+                    data.results.forEach(anime => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                            <img src="${anime.thumbnail}" alt="${anime.title}">
+                            <span>${anime.title}</span>
+                        `;
+                        listItem.addEventListener('click', () => {
+                            document.querySelector('.video-player iframe').src = anime.videoUrl;
+                            showAnimeInfo(anime);
+                        });
+                        animeListElement.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    loadingElement.style.display = 'none';
+                    console.error('Error fetching anime data:', error);
+                });
+        }
+
+        function filterAnime(filter) {
+            const animeListElement = document.getElementById('anime-list');
+            // Пример фильтрации (замените на реальный API)
+            fetch(`https://api.example.com/filter?genre=${filter}`)
+                .then(response => response.json())
+                .then(data => {
+                    animeListElement.innerHTML = '';
+                    data.results.forEach(anime => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                            <img src="${anime.thumbnail}" alt="${anime.title}">
+                            <span>${anime.title}</span>
+                        `;
+                        listItem.addEventListener('click', () => {
+                            document.querySelector('.video-player iframe').src = anime.videoUrl;
+                            showAnimeInfo(anime);
+                        });
+                        animeListElement.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error filtering anime data:', error));
+        }
+
+        function loadAbout() {
+            content.innerHTML = `
+                <h2>О сайте</h2>
+                <p>Этот сайт создан для просмотра аниме и общения с другими любителями аниме.</p>
+                <h3>Наша команда</h3>
+                <p>Мы - команда энтузиастов, создающих лучший аниме-сайт.</p>
+            `;
+        }
+
+        function loadContact() {
+            content.innerHTML = `
+                <h2>Контакты</h2>
+                <form id="contactForm">
+                    <label for="name">Имя:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="message">Сообщение:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                    <button type="submit">Отправить</button>
+                </form>
+            `;
+            document.getElementById('contactForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                // Пример отправки формы (замените на реальный API)
+                fetch('https://api.example.com/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        message: document.getElementById('message').value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Ваше сообщение отправлено!');
+                    document.getElementById('contactForm').reset();
+                })
+                .catch(error => console.error('Error sending contact form:', error));
+            });
+        }
+
+        // Инициализация страницы
+        navigate('home');
     </script>
 </body>
 </html>
